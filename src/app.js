@@ -1,4 +1,4 @@
-const Item = require('./mongodb')
+const {Item, User} = require('./mongodb')
 const express  = require('express')
 const app = express()
 app.use(express.json())
@@ -11,10 +11,35 @@ app.get('/items', (req, res) => {
   })
 })
 
+app.post('/signup', (req, res) => {
+  User.findOne({username: req.body.username}).then((user)=> {
+    if (!user){
+      const user = new User(req.body)
+      return user.save(res.body)
+    }
+    res.send("username taken")
+  }).then((user) => {
+    res.send(user)
+  }).catch((error) => {
+    res.send(error)
+  })
+})
+
+app.post('/login', (req, res) => {
+  User.findOne({username: req.body.username, password: req.body.password}).then((user) => {
+    if(!user){
+      return res.send('User not found')
+    }
+    res.send("logged in")
+  }).catch((error) => {
+    res.send(error)
+  })
+})
+
 app.get('/items/:id', (req,res) => {
   Item.findById({_id: req.params.id}).then((item) => {
     if (!item){
-      res.send("Item not found")
+      return res.send("Item not found")
     }
     res.status(200).send(item)
   } ).catch((error) => {
@@ -46,7 +71,7 @@ app.put('/items/:id', (req, res) => {
 app.delete('/items/:id', (req, res) => {
   Item.findByIdAndDelete(req.params.id).then((item) => {
     if(!item){
-      res.send('Item not found')
+      return res.send('Item not found')
     }
     res.send(item)
   }).catch((error) => {

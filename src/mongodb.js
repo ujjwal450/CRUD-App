@@ -14,6 +14,20 @@ const itemSchema = new Schema({
 
 })
 
-const Item = mongoose.model('Item', itemSchema)
+const userSchema = new Schema({
+  username:{
+    type: String,
+    required: true
+  },
+  password: {
+    type:String,
+    required: true
+    // validate(value){
 
-module.exports = Item
+    // }
+  }
+})
+
+const Item = mongoose.model('Item', itemSchema)
+const User = mongoose.model('USer', userSchema)
+module.exports = {Item, User}
