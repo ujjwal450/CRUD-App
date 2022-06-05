@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose
 mongoose.connect('mongodb://127.0.0.1:27017/test')
 
-const itemsSchema = new Schema({
+const itemSchema = new Schema({
   name: {
     type:String,
     required: true
@@ -14,6 +14,6 @@ const itemsSchema = new Schema({
 
 })
 
-const Item = mongoose.model('Item', itemsSchema)
+const Item = mongoose.model('Item', itemSchema)
 
-// module.exports(Item)
+module.exports = Item
