@@ -1,82 +1,96 @@
 const {Item, User} = require('./mongodb')
 const express  = require('express')
+const { Error } = require('mongoose')
 const app = express()
 app.use(express.json())
 
-app.get('/items', (req, res) => {
-  Item.find({}).then((items) => {
-    res.status(200).send(items)
-  }).catch((error) => {
-    res.status(400).send(error)
-  })
+app.get('/items', async(req, res) => {
+
+  try {
+
+    const users = await Item.find({})
+    res.send(users)
+  } catch (error) {
+    res.send(error)
+  }
+
 })
 
-app.post('/signup', (req, res) => {
-  User.findOne({username: req.body.username}).then((user)=> {
-    if (!user){
-      const user = new User(req.body)
-      return user.save(res.body)
+app.post('/signup', async (req, res) => {
+  try {
+    const user = new User(req.body)
+    const isUserExist = await User.findOne({username: req.body.username})
+    if(isUserExist){
+      throw new Error('Username taken')
     }
-    res.send("username taken")
-  }).then((user) => {
+    await user.save()
     res.send(user)
-  }).catch((error) => {
-    res.send(error)
-  })
+  } catch (error) {
+    res.send(error.message)
+  }
+
 })
 
-app.post('/login', (req, res) => {
-  User.findOne({username: req.body.username, password: req.body.password}).then((user) => {
-    if(!user){
-      return res.send('User not found')
-    }
-    res.send("logged in")
-  }).catch((error) => {
-    res.send(error)
-  })
+app.post('/login', async(req, res) => {
+  try {
+    console.log(req.body)
+    const user = await User.findByCredentials(req.body.username, req.body.password)
+    res.send(user)
+  } catch (error) {
+    res.send(error.message)
+  }
 })
 
-app.get('/items/:id', (req,res) => {
-  Item.findById({_id: req.params.id}).then((item) => {
-    if (!item){
+app.get('/items/:id', async(req,res) => {
+  try {
+    
+    const item = await Item.findById({_id: req.params.id})
+    if(!item){
       return res.send("Item not found")
     }
-    res.status(200).send(item)
-  } ).catch((error) => {
-    res.status(400).send(error)
-  })
-})
-
-app.post('/items', (req, res) => {
-  const item = new Item(req.body)
-  item.save().then(() => {
-    console.log(item)
-  }).catch((error) => {
-    res.status(400).send(error)
-  })
-  res.send("Item Added")
-})
-
-app.put('/items/:id', (req, res) => {
-  Item.findByIdAndUpdate(req.params.id, req.body).then((item) => {
-    if(!item){
-      res.send('Item not found')
-    }
     res.send(item)
-  }).catch((error) => {
+  } catch (error) {
     res.send(error)
-  })
+  }
+  
 })
 
-app.delete('/items/:id', (req, res) => {
-  Item.findByIdAndDelete(req.params.id).then((item) => {
+app.post('/items', async(req, res) => {
+  const item = new Item(req.body)
+  try {
+    await item.save()
+    res.send(item)
+  } catch (error) {
+    res.send(error)
+  }
+})
+
+app.put('/items/:id', async(req, res) => {
+  console.log(req.params)
+  console.log(req.body)
+  try {
+    const item = await Item.findByIdAndUpdate(req.params.id, req.body)
     if(!item){
       return res.send('Item not found')
     }
-    res.send(item)
-  }).catch((error) => {
+    res.send("Item updated")
+  } catch (error) {
     res.send(error)
-  })
+  }
+  
+})
+
+app.delete('/items/:id', async(req, res) => {
+  try {
+    const item = await Item.findByIdAndDelete(req.params.id)
+    if(!item){
+      return res.send("Item not found")
+    }
+    res.send(item)
+  } catch (error) {
+    res.send(error)
+  }
+  
 })
 
 app.listen(3000,() => {
