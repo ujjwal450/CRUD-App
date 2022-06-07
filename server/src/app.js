@@ -1,14 +1,12 @@
-const express  = require('express')
+const express = require('express')
 require('./db/mongoose')
+const adminRouter = require('./routers/admin')
 const userRouter = require('./routers/user')
-const itemRouter = require('./routers/item')
-
 
 const app = express()
 app.use(express.json())
 
-
+app.use(adminRouter)
 app.use(userRouter)
-app.use(itemRouter)
 
 module.exports = app
