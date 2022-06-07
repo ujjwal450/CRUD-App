@@ -7,7 +7,7 @@ const router = new express.Router()
 router.post('/user/login', async(req, res) => {
     const today = new Date(Date.now())
     try {
-        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const user = await User.findByCredentials(req.body.username, req.body.password)
         const token = await user.generateAuthToken()
         user.lastLogin = today.toLocaleString()
         await user.save()
