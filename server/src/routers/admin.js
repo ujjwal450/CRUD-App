@@ -11,7 +11,7 @@ router.post('/admin', async(req, res) => {
         const token = await admin.generateAuthToken()
         res.status(201).send({ admin, token })
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).send({'error': error.message})
     }
 
 })
@@ -22,7 +22,7 @@ router.post('/admin/login', async(req, res) => {
         const token = await admin.generateAuthToken()
         res.status(200).send({ admin, token })
     } catch (error) {
-        res.status(400).send(error.message)
+        res.status(400).send({'error': error.message})
     }
 })
 
@@ -43,7 +43,7 @@ router.patch('/admin/me', auth, async(req, res) => {
         }
         res.send(admin)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).send({'error': error.message})
     }
 })
 
@@ -56,7 +56,7 @@ router.post('/admin/logout', auth, async(req, res) => {
         await req.admin.save()
         res.send()
     } catch (error) {
-        res.status(500).send(error.message)
+        res.status(500).send({'error': error.message})
     }
 })
 
@@ -66,7 +66,7 @@ router.post('/admin/logoutAll', auth, async(req, res) => {
         await req.admin.save()
         res.send()
     } catch (error) {
-        res.status(500).send(error.message)
+        res.status(500).send({'error': error.message})
     }
 })
 
@@ -80,7 +80,7 @@ router.post('/admin/createUser', auth, async(req, res) => {
             // sendWelcomeEmail(user.email, user.password)
         res.status(201).send(user)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).send({'error': error.message})
     }
 })
 
@@ -93,13 +93,12 @@ router.get('/admin/listUsers', auth, async(req, res) => {
         res.send(users)
 
     } catch (error) {
-        res.status(400).send(error.message)
+        res.status(400).send({'error': error.message})
     }
 
 })
 
 router.patch('/admin/updateUser/:id', auth, async(req, res) => {
-    console.log(req.params)
     const updates = Object.keys(req.body)
     const allowedUpdates = ['firstName', 'lastName', 'email', 'password', 'mobileNo', 'username']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -115,7 +114,7 @@ router.patch('/admin/updateUser/:id', auth, async(req, res) => {
         }
         res.send(user)
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).send({'error': error.message})
     }
 })
 

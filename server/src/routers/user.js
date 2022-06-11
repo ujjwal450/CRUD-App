@@ -9,7 +9,7 @@ router.post('/user/login', async(req, res) => {
     try {
         const user = await User.findByCredentials(req.body.username, req.body.password)
         const token = await user.generateAuthToken()
-        user.lastLogin = today.toLocaleString()
+        user.lastLogin = today
         await user.save()
         res.status(200).send({ user, token })
     } catch (error) {

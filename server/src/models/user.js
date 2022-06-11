@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     lastLogin: {
-        type: String,
+        type: Date,
         default: Date.now()
     },
     tokens: [{
@@ -67,13 +67,13 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-userSchema.pre("save", async function(next) {
-    const user = this;
-    if (user.isModified("password")) {
-        user.password = await bcrypt.hash(user.password, 8);
-    }
-    next();
-});
+// userSchema.pre("save", async function(next) {
+//     const user = this;
+//     if (user.isModified("password")) {
+//         user.password = await bcrypt.hash(user.password, 8);
+//     }
+//     next();
+// });
 userSchema.methods.generateAuthToken = async function() {
     const user = this;
     const token = jwt.sign({
@@ -92,10 +92,10 @@ userSchema.statics.findByCredentials = async(username, password) => {
     if (!user) {
         throw new Error("Unable to login");
     }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-        throw new Error("Unable to login");
-    }
+    // const isMatch = await bcrypt.compare(password, user.password);
+    // if (!isMatch) {
+    //     throw new Error("Unable to login");
+    // }
     return user;
 };
 
