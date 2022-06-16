@@ -32,14 +32,18 @@ function App() {
           'Content-Type': 'application/json'
         }
       })
-      const data = await response.json()
+      const responseData = await response.json()
+      const data = {
+        ...responseData,
+        accountType: "admin"
+      }
       if (!data.error){
         setUserData(data.admin.username)
         setIsLoggedIn(true)
         setShowLoginErrorMessage(false)
         localStorage.setItem('token', data.token)
         localStorage.setItem('username', data.admin.username)
-        localStorage.setItem('accountType', data.admin.accountType)
+        localStorage.setItem('accountType', data.accountType)
       }
       else{
         const response = await fetch('http://127.0.0.1:3000/user/login',{
@@ -49,14 +53,18 @@ function App() {
             'Content-Type': 'application/json'
           }
         })
-        const data = await response.json()
+        const responseData = await response.json()
+        const data = {
+          ...responseData,
+          accountType: "user"
+        }
         if (response.status !== 400){
           setUserData(data.user.username)
           setIsLoggedIn(true)
           setShowLoginErrorMessage(false)
           localStorage.setItem('token', data.token)
           localStorage.setItem('username', data.user.username)
-          localStorage.setItem('accountType',data.user.accountType)
+          localStorage.setItem('accountType',data.accountType)
         }
       }
     } catch (error) {
@@ -128,7 +136,11 @@ function App() {
       },
       'body': JSON.stringify(userData)
     })
-    const response_data = await response.json()
+    const responseData = await response.json()
+    const response_data = {
+      ...responseData,
+      accountType: "user"
+    }
     if (response.status !== 400){
       setUserData(response_data.admin.username)
       setIsLoggedIn(true)
