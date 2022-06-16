@@ -1,36 +1,36 @@
-import Card from "../UI/Card/Card"
-import { useState } from 'react';
-import classes from './userForm.module.css'
+import Card from "../UI/Card/Card";
+import { useState } from "react";
+import classes from "./userForm.module.css";
 import Button from "../UI/Button/Button";
 
 const UserForm = (props) => {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [mobileNo, setMobileNo] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const firstNameChangeHandler = (e) => {
-    setFirstName(e.target.value)
-  }
+    setFirstName(e.target.value);
+  };
   const lastNameChangeHandler = (e) => {
-    setLastName(e.target.value)
-  }
+    setLastName(e.target.value);
+  };
   const emailChangeHandler = (e) => {
-    setEmail(e.target.value)
-  }
+    setEmail(e.target.value);
+  };
   const usernameChangeHandler = (e) => {
-    setUsername(e.target.value)
-  }
+    setUsername(e.target.value);
+  };
   const passwordChangeHandler = (e) => {
-    setPassword(e.target.value)
-  }
+    setPassword(e.target.value);
+  };
   const mobileNoChangeHandler = (e) => {
-    setMobileNo(e.target.value)
-  }
+    setMobileNo(e.target.value);
+  };
   const submitHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     props.onSubmit({
       firstName,
       lastName,
@@ -38,14 +38,12 @@ const UserForm = (props) => {
       mobileNo,
       username,
       password,
-    })
-  }
+    });
+  };
   return (
     <Card className={classes.createUser}>
       <form onSubmit={submitHandler}>
-      <div
-          className={classes.control}
-        >
+        <div className={classes.control}>
           <label>First Name</label>
           <input
             type="test"
@@ -54,9 +52,7 @@ const UserForm = (props) => {
             required
           />
         </div>
-        <div
-          className={classes.control}
-        >
+        <div className={classes.control}>
           <label>Last Name</label>
           <input
             type="test"
@@ -65,9 +61,7 @@ const UserForm = (props) => {
             required
           />
         </div>
-        <div
-          className={classes.control}
-        >
+        <div className={classes.control}>
           <label>Email</label>
           <input
             type="email"
@@ -76,9 +70,7 @@ const UserForm = (props) => {
             required
           />
         </div>
-        <div
-          className={classes.control}
-        >
+        <div className={classes.control}>
           <label>Mobile No</label>
           <input
             type="text"
@@ -87,9 +79,7 @@ const UserForm = (props) => {
             required
           />
         </div>
-        <div
-          className={classes.control}
-        >
+        <div className={classes.control}>
           <label>Username</label>
           <input
             type="test"
@@ -98,9 +88,7 @@ const UserForm = (props) => {
             required
           />
         </div>
-        <div
-          className={classes.control}
-        >
+        <div className={classes.control}>
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -110,7 +98,7 @@ const UserForm = (props) => {
           />
         </div>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} >
+          <Button type="submit" className={classes.btn}>
             Submit
           </Button>
         </div>
@@ -118,8 +106,7 @@ const UserForm = (props) => {
       {props.signupError && <div>Unable to create Account</div>}
       {props.createUserError && <div>Unable to create User</div>}
     </Card>
-    
-  )
-}
+  );
+};
 
-export default UserForm
+export default UserForm;

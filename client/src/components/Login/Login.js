@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import Card from '../UI/Card/Card';
-import classes from './Login.module.css';
-import Button from '../UI/Button/Button';
+import Card from "../UI/Card/Card";
+import classes from "./Login.module.css";
+import Button from "../UI/Button/Button";
 
 const Login = (props) => {
-  const [enteredUsername, setEnteredUsername] = useState('');
-  const [enteredPassword, setEnteredPassword] = useState('');
-  const [enteredAccountType, setEnteredAccountType] = useState('user')
+  const [enteredUsername, setEnteredUsername] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState("");
+  const [enteredAccountType, setEnteredAccountType] = useState("user");
 
-  
   const usernameChangeHandler = (event) => {
     setEnteredUsername(event.target.value);
   };
@@ -19,22 +18,22 @@ const Login = (props) => {
   };
 
   const accountTypeChangeHandler = (event) => {
-    setEnteredAccountType(event.target.value)
-
-  }
+    setEnteredAccountType(event.target.value);
+  };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin({username:enteredUsername, password:enteredPassword, accountType:enteredAccountType});
+    props.onLogin({
+      username: enteredUsername,
+      password: enteredPassword,
+      accountType: enteredAccountType,
+    });
   };
-
 
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
-        <div
-          className={classes.control}
-        >
+        <div className={classes.control}>
           <label>Username</label>
           <input
             type="test"
@@ -43,9 +42,7 @@ const Login = (props) => {
             required
           />
         </div>
-        <div
-          className={classes.control}
-        >
+        <div className={classes.control}>
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -55,7 +52,7 @@ const Login = (props) => {
           />
         </div>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} >
+          <Button type="submit" className={classes.btn}>
             Login
           </Button>
         </div>
