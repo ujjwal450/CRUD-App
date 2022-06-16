@@ -1,127 +1,102 @@
-import { useRef, useState } from "react";
-import Card from "../UI/Card/Card";
-import classes from "./EditForm.module.css";
-const EditForm = (props) => {
-  const [formValues, setFormValues] = useState(props.user);
-  const setFirstNameValue = (e) => {
+import { useRef, useState } from "react"
+import Card from "../UI/Card/Card"
+import classes from './EditForm.module.css'
+const EditForm =(props)=>{
+  const [formValues, setFormValues] = useState(props.user)
+  const setFirstNameValue = (e)=> {
     setFormValues((prevState) => {
-      return {
+      return{
         ...prevState,
-        firstName: e.target.value,
-      };
-    });
-  };
+        firstName: e.target.value
+      }
+    })
+  }
   const setLastNameValue = (e) => {
     setFormValues((prevState) => {
-      return {
+      return{
         ...prevState,
-        lastName: e.target.value,
-      };
-    });
-  };
-  const setEmailValue = (e) => {
+        lastName: e.target.value
+      }
+    })
+  }
+  const setEmailValue = (e)=> {
     setFormValues((prevState) => {
-      return {
+      return{
         ...prevState,
-        email: e.target.value,
-      };
-    });
-  };
-  const setUsernameValue = (e) => {
+        email: e.target.value
+      }
+    })
+  }
+  const setUsernameValue = (e)=> {
     setFormValues((prevState) => {
-      return {
+      return{
         ...prevState,
-        username: e.target.value,
-      };
-    });
-  };
-  const setPasswordValue = (e) => {
+        username: e.target.value
+      }
+    })
+  }
+  const setPasswordValue = (e)=> {
     setFormValues((prevState) => {
-      return {
+      return{
         ...prevState,
-        password: e.target.value,
-      };
-    });
-  };
-  const setMobileNoValue = (e) => {
+        password: e.target.value
+      }
+    })
+  }
+  const setMobileNoValue = (e)=> {
     setFormValues((prevState) => {
-      return {
+      return{
         ...prevState,
-        mobileNo: e.target.value,
-      };
-    });
-  };
+        mobileNo: e.target.value
+      }
+    })
+  }
   const submitFormHandler = (e) => {
-    e.preventDefault();
-    const updateOptions = {};
-    for (const item in props.user) {
-      if (props.user[item] !== formValues[item]) {
-        updateOptions[item] = formValues[item];
+    e.preventDefault()
+    const updateOptions = {}
+    for(const item in props.user){
+      if (props.user[item] !== formValues[item]){
+        updateOptions[item] = formValues[item]
       }
     }
-    props.onSubmit(updateOptions);
-  };
-  return (
+    props.onSubmit(updateOptions)
+    
+  }
+  return(
     <div className={classes.createUser}>
-      <form action="" onSubmit={submitFormHandler}>
-        <div className={classes.control}>
-          <label htmlFor="">First Name</label>
-          <input
-            type="text"
-            required
-            value={formValues.firstName}
-            onChange={setFirstNameValue}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="">Last Name</label>
-          <input
-            type="text"
-            required
-            value={formValues.lastName}
-            onChange={setLastNameValue}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="">Email</label>
-          <input
-            type="email"
-            required
-            value={formValues.email}
-            onChange={setEmailValue}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="">Username</label>
-          <input
-            type="text"
-            required
-            value={formValues.username}
-            onChange={setUsernameValue}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="">Mobile No</label>
-          <input
-            type="text"
-            value={formValues.mobileNo}
-            onChange={setMobileNoValue}
-          />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="">Password</label>
-          <input
-            type="password"
-            value={formValues.password}
-            onChange={setPasswordValue}
-          />
-        </div>
-        <div className={classes.action}>
-          <input type="submit" />
-        </div>
-      </form>
-    </div>
-  );
-};
+    <form action="" onSubmit={submitFormHandler} >
+       <div className={classes.control}>
+      <label htmlFor="">First Name</label>
+      <input type="text" required value={formValues.firstName} onChange={setFirstNameValue}/>
+      </div>
+      <div className={classes.control}>
+      <label htmlFor="">Last Name</label>
+      <input type="text" required value={formValues.lastName} onChange={setLastNameValue}/>
+      </div>
+      <div className={classes.control}>
+      <label htmlFor="">Email</label>
+      <input type="email" required value={formValues.email} onChange={setEmailValue}/>
+      </div>
+      <div className={classes.control}>
+      <label htmlFor="">Username</label>
+      <input type="text" required value={formValues.username} onChange={setUsernameValue}/>
+      </div>
+      <div className={classes.control}>
+      <label htmlFor="">Mobile No</label>
+      <input type="text" value={formValues.mobileNo} onChange={setMobileNoValue}/>
+      </div>
+      <div className={classes.control}>
+      <label htmlFor="">Password</label>
+      <input type="password" value={formValues.password} onChange={setPasswordValue}/>
+      </div>
+      <div className={classes.action}>
+      <input type="submit" />
+      </div>
 
-export default EditForm;
+    </form>
+    </div>
+
+  )
+}
+
+export default EditForm
