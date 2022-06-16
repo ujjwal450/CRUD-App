@@ -11,6 +11,7 @@ const Home = (props) => {
   const [showCreateUserForm, setShowCreateUserForm] =useState(false)
   const [isUserCreated, setIsUserCreated] = useState(false)
   const [isUserUpdated, setIsUserUpdated] = useState(false)
+  const [showCreateUserError, setShowCreateUserError] = useState(false)
   const accountType = localStorage.getItem('accountType')
   const token = localStorage.getItem('token')
   useEffect(() => {
@@ -44,6 +45,7 @@ const Home = (props) => {
     setShowUserList(false)
     setShowCreateUserForm(true)
     setIsUserCreated(false)
+    setShowCreateUserError(false)
   }
   const createUserHandler = async (data) => {
     const userData = {
@@ -65,13 +67,17 @@ const Home = (props) => {
         },
         'body': JSON.stringify(userData)
       })
+      const responseBody = await response.json()
       if (response.status === 201){
         setIsUserCreated(true)
       }
-      
-
+      if (responseBody.error){
+        setShowCreateUserError((prevState) =>{
+          return !prevState
+        })
+      }
     } catch (error) {
-      
+      console.log(error.error)
     }
     setShowCreateUserForm(false)
   }
@@ -91,10 +97,11 @@ const Home = (props) => {
       <Button onClick={showFormHandler}>Create User</Button>
       </div>
       }
+      {showCreateUserError && <div>Unable to Create User</div>}
       {isUserCreated && <h1>User Created</h1>}
       </Card>
       {showCreateUserForm && <UserFrom onSubmit={createUserHandler}/>}
-      {accountType === 'admin' && <UserList users = {userList} onUpdate={reloadUsersHandler}/>}
+      {accountType === 'admin' && <UserList users = {userList} onUpdate={reloadUsersHandler} />}
       
       
     

@@ -54,15 +54,6 @@ const Login = (props) => {
             required
           />
         </div>
-        <div className={classes.control}>
-          <label htmlFor="AccountType">Account Type</label>
-          <select value={enteredAccountType}
-            onChange={accountTypeChangeHandler}>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-          </select>
-      
-        </div>
         <div className={classes.actions}>
           <Button type="submit" className={classes.btn} >
             Login

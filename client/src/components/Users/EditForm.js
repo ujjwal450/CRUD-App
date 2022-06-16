@@ -87,7 +87,7 @@ const EditForm =(props)=>{
       </div>
       <div className={classes.control}>
       <label htmlFor="">Password</label>
-      <input type="password" onChange={setPasswordValue}/>
+      <input type="password" value={formValues.password} onChange={setPasswordValue}/>
       </div>
       <div className={classes.action}>
       <input type="submit" />

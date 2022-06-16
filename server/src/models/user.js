@@ -48,10 +48,6 @@ const userSchema = new mongoose.Schema({
         trim: true,
         unique: true
     },
-    accountType: {
-        type: String,
-        required: true
-    },
     lastLogin: {
         type: Date,
         default: Date.now()
@@ -74,7 +70,7 @@ const userSchema = new mongoose.Schema({
 //     }
 //     next();
 // });
-userSchema.methods.generateAuthToken = async function() {
+userSchema.methods.generateAuthToken = async function () {
     const user = this;
     const token = jwt.sign({
         _id: user._id.toString()
@@ -85,12 +81,15 @@ userSchema.methods.generateAuthToken = async function() {
     await user.save();
     return token;
 };
-userSchema.statics.findByCredentials = async(username, password) => {
+userSchema.statics.findByCredentials = async (username, password) => {
     const user = await User.findOne({
         username
     });
     if (!user) {
         throw new Error("Unable to login");
+    }
+    if (user.password !== password) {
+        throw new Error("Unable to Login")
     }
     // const isMatch = await bcrypt.compare(password, user.password);
     // if (!isMatch) {
@@ -99,6 +98,6 @@ userSchema.statics.findByCredentials = async(username, password) => {
     return user;
 };
 
-const User = mongoose.model("USer", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

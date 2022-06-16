@@ -115,6 +115,8 @@ const UserForm = (props) => {
           </Button>
         </div>
       </form>
+      {props.signupError && <div>Unable to create Account</div>}
+      {props.createUserError && <div>Unable to create User</div>}
     </Card>
     
   )

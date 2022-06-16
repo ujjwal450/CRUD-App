@@ -9,6 +9,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState('')
   const [showSignupFrom, setShowSignupForm] = useState(false)
+  const [showLoginErrorMessage, setShowLoginErrorMessage] = useState(false)
+  const [showSignupErrorMessage, setShowSignupErrorMessage] = useState(false)
   useEffect(()=> {
     const token = localStorage.getItem('token')
     const username = localStorage.getItem('username')
@@ -22,7 +24,6 @@ function App() {
   }, [])
 
   const loginHandler = async(loginInformation) => {
-    if(loginInformation.accountType === 'admin'){
     try {
       const response = await fetch('http://127.0.0.1:3000/admin/login',{
         method:'POST',
@@ -32,19 +33,15 @@ function App() {
         }
       })
       const data = await response.json()
-      if (response.status !== 400){
+      if (!data.error){
         setUserData(data.admin.username)
         setIsLoggedIn(true)
+        setShowLoginErrorMessage(false)
         localStorage.setItem('token', data.token)
         localStorage.setItem('username', data.admin.username)
         localStorage.setItem('accountType', data.admin.accountType)
       }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-    else{
-      try {
+      else{
         const response = await fetch('http://127.0.0.1:3000/user/login',{
           method:'POST',
           body: JSON.stringify(loginInformation),
@@ -56,13 +53,16 @@ function App() {
         if (response.status !== 400){
           setUserData(data.user.username)
           setIsLoggedIn(true)
+          setShowLoginErrorMessage(false)
           localStorage.setItem('token', data.token)
           localStorage.setItem('username', data.user.username)
           localStorage.setItem('accountType',data.user.accountType)
         }
-      } catch (error) {
-        console.log(error)
       }
+    } catch (error) {
+      setShowLoginErrorMessage((prevState) => {
+        return !prevState
+      })
     }
       
   };
@@ -121,27 +121,26 @@ function App() {
       password: data.password,
       accountType: 'admin'
     }
-    try {
-      const response = await fetch('http://127.0.0.1:3000/admin',{
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/json',
-        },
-        'body': JSON.stringify(userData)
+    const response = await fetch('http://127.0.0.1:3000/admin',{
+      method: 'POST',
+      headers: {
+          'Content-type': 'application/json',
+      },
+      'body': JSON.stringify(userData)
+    })
+    const response_data = await response.json()
+    if (response.status !== 400){
+      setUserData(response_data.admin.username)
+      setIsLoggedIn(true)
+      setShowSignupForm(false)
+      localStorage.setItem('token', response_data.token)
+      localStorage.setItem('username', response_data.admin.username)
+      localStorage.setItem('accountType',response_data.admin.accountType)
+    }
+    if(response_data.error)  {
+      setShowSignupErrorMessage((prevState) => {
+        return !prevState
       })
-      const data = await response.json()
-      if (response.status !== 400){
-        setUserData(data.admin.username)
-        setIsLoggedIn(true)
-        setShowSignupForm(false)
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('username', data.admin.username)
-        localStorage.setItem('accountType',data.admin.accountType)
-      }
-      
-
-    } catch (error) {
-      
     }
   }
 
@@ -149,10 +148,11 @@ function App() {
     <React.Fragment>
       
       <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} signup={signupHandler}/>
-      {showSignupFrom ? <main><UserForm onSubmit={adminSignupHandler}/> </main>:
+      {showSignupFrom ? <main><UserForm onSubmit={adminSignupHandler} signupError={showSignupErrorMessage}/> </main>:
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
         {isLoggedIn && <Home onLogout={logoutHandler} onLogin={userData}/>}
+        {showLoginErrorMessage && <div>Unable to Login</div>}
       </main>
 }
     </React.Fragment>

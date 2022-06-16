@@ -48,10 +48,6 @@ const adminSchema = new mongoose.Schema({
         trim: true,
         unique: true
     },
-    accountType: {
-        type: String,
-        required: true
-    },
     tokens: [{
         token: {
             type: String,
@@ -63,14 +59,14 @@ const adminSchema = new mongoose.Schema({
     timestamps: true
 });
 
-adminSchema.pre("save", async function(next) {
+adminSchema.pre("save", async function (next) {
     const user = this;
     if (user.isModified("password")) {
         user.password = await bcrypt.hash(user.password, 8);
     }
     next();
 });
-adminSchema.methods.generateAuthToken = async function() {
+adminSchema.methods.generateAuthToken = async function () {
     const user = this;
     const token = jwt.sign({
         _id: user._id.toString()
@@ -81,7 +77,7 @@ adminSchema.methods.generateAuthToken = async function() {
     await user.save();
     return token;
 };
-adminSchema.statics.findByCredentials = async(username, password) => {
+adminSchema.statics.findByCredentials = async (username, password) => {
     const admin = await Admin.findOne({
         username
     });
